@@ -1,36 +1,15 @@
 spring:
-  datasource:
-    url: jdbc:mysql://localhost:3308/vitalsigndb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    username: root
-    password: rootpassword
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
-    show-sql: true
-  cloud:
-    consul:
-      host: localhost
-      port: 8500
-      discovery:
-        enabled: true
-        register: true
-        deregister: true
-        health-check-path: /actuator/health
-        health-check-interval: 10s
   application:
-    name: vitalsign
-server:
-  port: 8090
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  endpoint:
-    health:
-      show-details: always
+    name: vitalsign  # Name of the application
+  cloud:
+    config:
+      uri: http://localhost:8888  # URI of the Spring Cloud Config Server
+  config:
+    import: configserver:http://localhost:8888  # Explicitly import the configuration from Config Server
+  profiles:
+    active: test  # Active profile (this fetches the dev-specific configuration)
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
